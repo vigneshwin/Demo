@@ -28,8 +28,9 @@ class ViewFragment : Fragment(), CommonInterface.ViewData {
     private lateinit var mList: ListView
     private lateinit var mErrorText: TextView
     private lateinit var mSwipeRefreshLayout: SwipeRefreshLayout
-    private lateinit var mAdapter: CustomListAdapter
+    private var mAdapter: CustomListAdapter? = null
     private var mPresenter: CommonInterface.Presenter? = null
+    private var mReponseBody: MainActivityModel? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -52,12 +53,20 @@ class ViewFragment : Fragment(), CommonInterface.ViewData {
 
     override fun setData(reponseBody: MainActivityModel?) {
         setViewVisibility(true)
-        mAdapter = CustomListAdapter(activity!!.applicationContext, reponseBody)
-        mList.adapter = mAdapter
+        this.mReponseBody = reponseBody
+        if (null == mAdapter) {
+            mAdapter = CustomListAdapter(activity!!.applicationContext, mReponseBody)
+            mList.adapter = mAdapter
+        } else {
+            mAdapter!!.notifyDataSetChanged()
+        }
     }
 
     override fun onErrorData(errorMessage: String) {
         Log.e(LOG_CLASS_TAG,"errorMessage : "+errorMessage)
+        if (null != mAdapter) {
+            mAdapter!!.notifyDataSetChanged()
+        }
         setViewVisibility(false)
     }
 

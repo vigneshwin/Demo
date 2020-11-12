@@ -10,9 +10,16 @@ import com.demo.demoapp.common.ActivityUtils
 import com.demo.demoapp.common.CommonInterface
 import com.demo.demoapp.presenter.MainActivityPresenter
 import com.demo.demoapp.repo.remote.RemoteDataSource
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
 
 class MainActivity : AppCompatActivity(), CommonInterface.View {
     private lateinit var mPresenter: MainActivityPresenter
+    /*
+    *This variable initialization is for testcase execution i.e. class MainActivityTest.kt
+    * if the variable set with response value then the test case will pass or else fail
+    */
+    var mTitleValue: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,5 +35,6 @@ class MainActivity : AppCompatActivity(), CommonInterface.View {
         runOnUiThread {
             supportActionBar!!.title = title
         }
+        this.mTitleValue = title
     }
 }
